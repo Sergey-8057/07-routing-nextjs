@@ -3,16 +3,19 @@ import Link from 'next/link';
 import css from './SidebarNotes.module.css';
 
 const SidebarNotes = async () => {
-  const tags: string[] = ['All', 'Work', 'Personal', 'Meeting', 'Shopping', 'Todo'];
+  const tags: string[] = ['All', 'Todo', 'Work', 'Personal', 'Meeting', 'Shopping'];
   return (
     <ul className={css.menuList}>
-      <li className={css.menuItem}>
-        {tags.map((tag, index) => (
-          <Link key={index} href={`/notes/filter/${tag}`} className={css.menuLink}>
+      {tags.map((tag, index) => (
+        <li key={index} className={css.menuItem}>
+          <Link
+            href={`/notes/filter/${tag}`}
+            className={css.menuLink}
+          >
             {tag}
           </Link>
-        ))}
-      </li>
+        </li>
+      ))}
     </ul>
   );
 };

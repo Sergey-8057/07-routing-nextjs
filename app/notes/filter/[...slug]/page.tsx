@@ -13,5 +13,7 @@ export default async function NotesPage({ params }: Props) {
   const perPage = 12;
   const initialData = await fetchNotes(search, page, perPage, tag);
 
-  return <NotesClient initialData={initialData} initialSearchParams={{ search, page, tag }} />;
+  return (
+    <NotesClient initialData={initialData} initialSearch={search} initialPage={page} tag={tag} />
+  );
 }
