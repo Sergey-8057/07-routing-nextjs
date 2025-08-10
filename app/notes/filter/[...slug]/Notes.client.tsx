@@ -20,31 +20,36 @@ interface NotesClientProps {
 
 export default function NotesClient({
   initialData,
-  initialSearch,
-  initialPage,
-  tag,
+  initialSearch = '',
+  initialPage = 1,
+  tag = '',
 }: NotesClientProps) {
+  const [inputValue, setInputValue] = useState(initialSearch);
   const [search, setSearch] = useState(initialSearch);
   const [page, setPage] = useState(initialPage);
-  const [currentTag, setCurrentTag] = useState(tag);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const perPage = 12;
 
-  useEffect(() => {
-    setCurrentTag(tag);
-    setPage(1);
-  }, [tag]);
-
-  const debouncedSetSearch = useDebouncedCallback((value: string) => {
+  const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
     setPage(1);
-  }, 300);
+  }, 1000);
+
+  const handleInputChange = (value: string) => {
+    setInputValue(value);
+    debouncedSearch(value);
+  };
+
+  useEffect(() => {
+    setInputValue(initialSearch);
+    setSearch(initialSearch);
+  }, [initialSearch]);
 
   const { data: response } = useQuery<NotesResponse>({
-    queryKey: ['notes', search, page, currentTag],
-    queryFn: () => fetchNotes(search, page, perPage, currentTag),
+    queryKey: ['notes', search, page, tag],
+    queryFn: () => fetchNotes(search, page, perPage, tag),
     initialData,
-    placeholderData: previousData => previousData as NotesResponse,
+    placeholderData: previousData => previousData,
   });
 
   const hasNotes = response?.notes?.length > 0;
@@ -52,7 +57,7 @@ export default function NotesClient({
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox value={search} onSearchChange={debouncedSetSearch} />
+        <SearchBox value={inputValue} onSearchChange={handleInputChange} />
         {response?.totalPages > 1 && (
           <Pagination currentPage={page} totalPages={response.totalPages} onPageChange={setPage} />
         )}
