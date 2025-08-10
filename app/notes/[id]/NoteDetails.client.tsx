@@ -3,9 +3,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { fetchNoteById } from '../../../lib/api';
-import css from './NotePreview.module.css';
+import css from './NoteDetails.module.css';
 
-const NotePreview = () => {
+const NoteDetails = () => {
   const { id } = useParams<{ id: string }>();
   const {
     data: note,
@@ -38,4 +38,4 @@ const NotePreview = () => {
   );
 };
 
-export default NotePreview;
+export default NoteDetails;
