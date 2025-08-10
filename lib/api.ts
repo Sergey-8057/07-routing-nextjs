@@ -10,7 +10,7 @@ export interface NotesResponse {
   totalPages: number;
 }
 
-export const fetchNotes = async (search: string, page: number, perPage: number) => {
+export const fetchNotes = async (search: string, page: number, perPage: number, tag: string) => {
   const params: Record<string, string | number> = {
     page,
     perPage,
@@ -18,6 +18,9 @@ export const fetchNotes = async (search: string, page: number, perPage: number) 
   const trimmedSearch = search.trim();
   if (trimmedSearch) {
     params.search = trimmedSearch;
+  }
+  if (tag !== 'All') {
+    params.tag = tag;
   }
 
   const res = await axios.get<NotesResponse>('/notes', { params });

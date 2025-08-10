@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { fetchNotes, NotesResponse } from '../../lib/api';
-import NoteList from '../../components/NoteList/NoteList';
-import SearchBox from '../../components/SearchBox/SearchBox';
-import Pagination from '../../components/Pagination/Pagination';
-import Modal from '../../components/Modal/Modal';
-import NoteForm from '../../components/NoteForm/NoteForm';
+import { fetchNotes, NotesResponse } from '@/lib/api';
+import NoteList from '@/components/NoteList/NoteList';
+import SearchBox from '@/components/SearchBox/SearchBox';
+import Pagination from '@/components/Pagination/Pagination';
+import Modal from '@/components/Modal/Modal';
+import NoteForm from '@/components/NoteForm/NoteForm';
 import css from './NotesPage.module.css';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -16,12 +16,14 @@ interface NotesClientProps {
   initialSearchParams: {
     search: string;
     page: number;
+    tag: string;
   };
 }
 
 export default function NotesClient({ initialData, initialSearchParams }: NotesClientProps) {
   const [search, setSearch] = useState(initialSearchParams.search);
   const [page, setPage] = useState(initialSearchParams.page);
+  const [tag] = useState(initialSearchParams.tag);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const perPage = 12;
 
@@ -31,8 +33,8 @@ export default function NotesClient({ initialData, initialSearchParams }: NotesC
   }, 300);
 
   const { data: response } = useQuery<NotesResponse>({
-    queryKey: ['notes', search, page],
-    queryFn: () => fetchNotes(search, page, perPage),
+    queryKey: ['notes', search, page, tag],
+    queryFn: () => fetchNotes(search, page, perPage, tag),
     initialData,
     placeholderData: previousData => previousData as NotesResponse,
   });

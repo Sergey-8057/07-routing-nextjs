@@ -17,21 +17,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'NextJS Homework - 6',
+  title: 'NextJS Homework - 7',
   description: 'NoteHub - manage your notes',
 };
 
 export default function RootLayout({
   children,
+  preview,
 }: Readonly<{
   children: React.ReactNode;
+  preview: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <TanStackProvider>
           <Header />
-          <main>{children}</main>
+          <main>
+            {children}
+            {preview}
+          </main>
           <div id="note-modal-root"></div>
           <Footer />
         </TanStackProvider>
